@@ -213,11 +213,14 @@ private fun BytecodePatchContext.replaceBodies(group: String) {
         val target = mutableClassDefBy(c.type)
         c.methods.forEach { replacement ->
             val old = target.methods.singleOrNull { it.id() == replacement.id() }
-                ?: throw PatchException("Missing replacement target ${c.type}->${replacement.id()}")
-            val patched = ImmutableMethod(old.definingClass, old.name, old.parameters, old.returnType,
-                old.accessFlags, old.annotations, old.hiddenApiRestrictions, replacement.implementation).toMutable()
-            target.methods.remove(old)
-            target.methods.add(patched)
+            if (old == null) {
+                target.methods.add(replacement.toMutable())
+            } else {
+                val patched = ImmutableMethod(old.definingClass, old.name, old.parameters, old.returnType,
+                    old.accessFlags, old.annotations, old.hiddenApiRestrictions, replacement.implementation).toMutable()
+                target.methods.remove(old)
+                target.methods.add(patched)
+            }
         }
     }
 }
@@ -230,6 +233,18 @@ val museMcDebug = bytecodePatch(
     compatibleWith(museCompatibility)
     dependsOn(museClone)
     execute { replaceBodies("mcdebug") }
+}
+
+val museJsonFlags = bytecodePatch(
+    name = "Import/export Mobile Config overrides",
+    description = "Copy the app's mc_overrides.json file in and out.",
+    default = true
+) {
+    compatibleWith(museCompatibility)
+    dependsOn(museMcDebug)
+    extendWith("muse/jsonbridge.dex")
+    extendWith("muse/jsonhooks.dex")
+    execute { replaceBodies("jsonhooks") }
 }
 
 val museLocalTrust = bytecodePatch(

@@ -1,9 +1,41 @@
 {
-  "version": "1.2.1",
+  "version": "1.2.2",
   "patches": [
     {
       "name": "Enable MC Debug",
       "description": "Enable internal settings.",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.facebook.aura",
+          "name": "Muse",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "13.0.0.4.159",
+              "versionCodes": {
+                "ARM64_V8A": 1061801514,
+                "ARMEABI_V7A": 1061801514,
+                "X86_64": 1061801514,
+                "X86": 1061801514
+              },
+              "isExperimental": false,
+              "minSdk": 29,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Import/export Mobile Config overrides",
+      "description": "Copy the app's mc_overrides.json file in and out.",
       "default": true,
       "category": null,
       "compatiblePackages": [
