@@ -41,7 +41,7 @@ with zipfile.ZipFile(a.original) as old,zipfile.ZipFile(a.patched) as new:
 check('All original Java/JNI class names retained',set(original)==set(patched))
 apk=APK(str(a.patched)); manifest=apk.get_android_manifest_xml(); ns='{http://schemas.android.com/apk/res/android}'
 check('Separate application ID',apk.get_package()==a.package_name)
-check('Correct visible label',apk.get_app_name()==(a.app_name or ('Muse MC Debug Test' if a.trust else 'Muse MC Debug')))
+check('Correct visible label',apk.get_app_name()==(a.app_name or ('MC Debug Test' if a.trust else 'MC Debug')))
 check('Original SDK bounds retained',apk.get_min_sdk_version()=='29' and apk.get_target_sdk_version()=='36')
 check('Original version retained',apk.get_androidversion_name()=='13.0.0.4.159' and apk.get_androidversion_code()=='1061801514')
 check('No split-required flag or requiredSplitTypes',all(e.get(ns+'isSplitRequired') not in ('true','1','0xffffffff') and e.get(ns+'requiredSplitTypes') is None for e in manifest.iter()))

@@ -28,17 +28,17 @@ import java.security.MessageDigest
 
 private const val ORIGINAL = "com.facebook.aura"
 private const val DEFAULT_PACKAGE = "com.facebook.aura.mcdebug"
-private const val DEFAULT_APP_NAME = "Muse MC Debug"
+private const val DEFAULT_APP_NAME = "MC Debug"
 private val packageNameOption = stringOption(
     key = "packageName", default = DEFAULT_PACKAGE, title = "Package name",
-    description = "Application ID for the clone, such as com.example.muse. Must differ from com.facebook.aura. Authorities, permissions and account type follow this value.",
+    description = "Unique app ID, different from com.facebook.aura.",
     required = true,
     validator = { value -> value != null && value != ORIGINAL && value.length <= 160 &&
         Regex("[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)+").matches(value) }
 )
 private val appNameOption = stringOption(
     key = "appName", default = DEFAULT_APP_NAME, title = "App name",
-    description = "Launcher and share-target name. A custom name is retained when the local-trust test patch is enabled.",
+    description = "Name shown in the launcher and share menu.",
     required = true,
     validator = { value -> value != null && value.isNotBlank() && value.length <= 80 &&
         value == value.trim() && value.none { it.code < 32 || it.code == 127 } }
@@ -61,7 +61,7 @@ private fun sha256(bytes: ByteArray) = MessageDigest.getInstance("SHA-256").dige
 private fun Method.id() = name + "(" + parameterTypes.joinToString("") + ")" + returnType
 private fun requireInput(metadata: PackageMetadata) {
     if (metadata.packageName != ORIGINAL || metadata.versionName != "13.0.0.4.159" || metadata.versionCode != "1061801514") {
-        throw PatchException("Use the ORIGINAL Muse APK: com.facebook.aura 13.0.0.4.159 (1061801514). Already-patched and other builds are not supported.")
+        throw PatchException("Requires original APK: com.facebook.aura 13.0.0.4.159 (1061801514).")
     }
 }
 private val museCompatibility = Compatibility(
@@ -70,7 +70,7 @@ private val museCompatibility = Compatibility(
 )
 private fun BytecodePatchContext.method(type: String, id: String): MutableMethod =
     mutableClassDefBy(type).methods.singleOrNull { it.id() == id }
-        ?: throw PatchException("Expected exactly one $type->$id; wrong Muse build")
+        ?: throw PatchException("Expected exactly one $type->$id; unsupported build")
 private fun ref(instruction: Any): String? =
     ((instruction as? ReferenceInstruction)?.reference)?.toString()
 
@@ -139,7 +139,7 @@ private val cloneResources = resourcePatch {
                 }
             }
         }
-        if (accountTypes != 1) throw PatchException("Expected one Muse account-authenticator, got $accountTypes")
+        if (accountTypes != 1) throw PatchException("Expected one account-authenticator, got $accountTypes")
         var labels = 0
         decode("res/values*/strings.xml").forEach { path ->
             document(path).use { doc ->
@@ -156,13 +156,13 @@ private val cloneResources = resourcePatch {
         if (labels == 0) throw PatchException("Share-target label resource 0x7f120006 not found")
         listOf("stamp-cert-sha256", "META-INF/code_transparency_signed.jwt",
             "assets/dexopt/baseline.prof", "assets/dexopt/baseline.profm").forEach { delete(it) }
-        println("Muse resources: isolated account type; updated $labels share labels; standalone APK metadata")
+        println("Updated account type and $labels labels.")
     }
 }
 
 val museClone = bytecodePatch(
-    name = "Muse - Side-by-side clone and standalone fix",
-    description = "Set the clone package and app name. Isolate authorities, permissions and account type while preserving JNI/native code and standalone install metadata. Exact original Muse build only.",
+    name = "Side-by-side clone",
+    description = "Change package and app name; fix standalone install.",
     default = true
 ) {
     compatibleWith(museCompatibility)
@@ -199,7 +199,7 @@ val museClone = bytecodePatch(
             }
         }
         if (fields != 3 || strings == 0) throw PatchException("Unexpected identity occurrences: $strings strings, $fields fields")
-        println("Muse identity: changed $strings string instructions and $fields constant fields; trust tables retained")
+        println("Changed $strings identity strings and $fields fields.")
     }
 }
 
@@ -223,8 +223,8 @@ private fun BytecodePatchContext.replaceBodies(group: String) {
 }
 
 val museMcDebug = bytecodePatch(
-    name = "Muse - Enable MC Debug",
-    description = "Enable the local Internal Settings / Mobile Config gate. Does not grant employee/server permissions or force alpha flags.",
+    name = "Enable MC Debug",
+    description = "Enable internal settings.",
     default = true
 ) {
     compatibleWith(museCompatibility)
@@ -237,15 +237,15 @@ private val testLabel = resourcePatch {
     execute {
         document("AndroidManifest.xml").use { doc ->
             (doc.getElementsByTagName("application").item(0) as Element)
-                .setAttributeNS(ANDROID, "android:label", if (cloneAppName == DEFAULT_APP_NAME) "Muse MC Debug Test" else cloneAppName)
+                .setAttributeNS(ANDROID, "android:label", if (cloneAppName == DEFAULT_APP_NAME) "MC Debug Test" else cloneAppName)
         }
     }
 }
 
 val museLocalTrust = bytecodePatch(
-    name = "Muse - Local trust test (unsafe)",
-    description = "OPTIONAL TEST ONLY: reproduce the previously requested CRQ/FV0, CRT/CR1, CQa/CPz, WhatsApp, CSF/CSH and BWF local trust changes. Weakens protection from installed callers. Real provider results, expiry, Android enforcement and server checks remain. Use a test device/account.",
-    default = false
+    name = "Local trust",
+    description = "Relax local caller checks. Reduces caller protection.",
+    default = true
 ) {
     compatibleWith(museCompatibility)
     dependsOn(museMcDebug, testLabel)
@@ -282,6 +282,6 @@ val museLocalTrust = bytecodePatch(
         val target = wi.newLabelForIndex(query)
 
         wi.replaceInstruction(owner, BuilderInstruction30t(Opcode.GOTO_32, target))
-        println("Muse local trust TEST patch applied; platform, other-app and server checks remain")
+        println("Local trust applied; server checks unchanged.")
     }
 }

@@ -8,7 +8,7 @@ a=p.parse_args()
 if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+',a.repository):p.error('Use OWNER/REPOSITORY, not a URL')
 if not re.fullmatch(r'[A-Za-z0-9_.-]+',a.branch):p.error('Use a simple branch name')
 root=Path(__file__).resolve().parents[1]
-version='1.1.0'; filename=f'muse-patches-{version}.mpp'
+version='1.2.0'; filename=f'muse-patches-{version}.mpp'
 source=root/'build/libs'/filename
 if not source.is_file():
     source=root/'dist'/filename
@@ -17,7 +17,7 @@ dest=root/'dist'/filename;dest.parent.mkdir(exist_ok=True)
 if source.resolve()!=dest.resolve():shutil.copyfile(source,dest)
 manifest={
     'created_at':datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S'),
-    'description':'Muse 13.0.0.4.159 / 1061801514: side-by-side clone, standalone fix, MC Debug, and optional unsafe local-trust test. Android Manager compatible bundle; no phone runtime success claimed.',
+    'description':'Clone, MC Debug and local trust. All enabled by default.',
     'download_url':f'https://raw.githubusercontent.com/{a.repository}/{a.branch}/dist/{filename}',
     'signature_download_url':'',
     'version':version,

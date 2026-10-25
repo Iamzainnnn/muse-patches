@@ -1,9 +1,9 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "patches": [
     {
-      "name": "Muse - Enable MC Debug",
-      "description": "Enable the local Internal Settings / Mobile Config gate. Does not grant employee/server permissions or force alpha flags.",
+      "name": "Enable MC Debug",
+      "description": "Enable internal settings.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -34,9 +34,9 @@
       "options": []
     },
     {
-      "name": "Muse - Local trust test (unsafe)",
-      "description": "OPTIONAL TEST ONLY: reproduce the previously requested CRQ/FV0, CRT/CR1, CQa/CPz, WhatsApp, CSF/CSH and BWF local trust changes. Weakens protection from installed callers. Real provider results, expiry, Android enforcement and server checks remain. Use a test device/account.",
-      "default": false,
+      "name": "Local trust",
+      "description": "Relax local caller checks. Reduces caller protection.",
+      "default": true,
       "category": null,
       "compatiblePackages": [
         {
@@ -66,8 +66,8 @@
       "options": []
     },
     {
-      "name": "Muse - Side-by-side clone and standalone fix",
-      "description": "Set the clone package and app name. Isolate authorities, permissions and account type while preserving JNI/native code and standalone install metadata. Exact original Muse build only.",
+      "name": "Side-by-side clone",
+      "description": "Change package and app name; fix standalone install.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -99,7 +99,7 @@
         {
           "key": "packageName",
           "title": "Package name",
-          "description": "Application ID for the clone, such as com.example.muse. Must differ from com.facebook.aura. Authorities, permissions and account type follow this value.",
+          "description": "Unique app ID, different from com.facebook.aura.",
           "required": true,
           "type": "kotlin.String",
           "default": "com.facebook.aura.mcdebug",
@@ -108,10 +108,10 @@
         {
           "key": "appName",
           "title": "App name",
-          "description": "Launcher and share-target name. A custom name is retained when the local-trust test patch is enabled.",
+          "description": "Name shown in the launcher and share menu.",
           "required": true,
           "type": "kotlin.String",
-          "default": "Muse MC Debug",
+          "default": "MC Debug",
           "values": null
         }
       ]

@@ -20,17 +20,17 @@ done
 .tools/kotlin/kotlinc/bin/kotlinc src/main/kotlin -classpath "$RUNTIME" -jvm-target 11 -Xlambdas=class -d build/classes
 cat > build/MANIFEST.MF <<'EOF'
 Manifest-Version: 1.0
-Name: luvztroy Muse patches
-Description: Version-locked Muse clone, MC Debug and optional local trust test
-Version: 1.1.0
+Name: luvztroy patches
+Description: Clone, MC Debug and local trust
+Version: 1.2.0
 Patcher-Version: 2.0.0
 Author: luvztroy custom patches
 License: GPL-3.0-only
 
 EOF
-jar --create --file build/libs/muse-patches-1.1.0.mpp --manifest build/MANIFEST.MF -C build/classes . -C src/main/resources . -C . LICENSE -C . NOTICE
+jar --create --file build/libs/muse-patches-1.2.0.mpp --manifest build/MANIFEST.MF -C build/classes . -C src/main/resources . -C . LICENSE -C . NOTICE
 jar --create --file build/patch-classes.jar -C build/classes .
 java -cp .tools/r8-9.1.31.jar com.android.tools.r8.D8 --release --min-api 26 --lib .tools/android-4.1.1.4.jar --lib "${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk-amd64}" --classpath "$RUNTIME" --output build/dex build/patch-classes.jar
-jar --update --file build/libs/muse-patches-1.1.0.mpp -C build/dex classes.dex
-java -jar "$RUNTIME" list-patches --patches build/libs/muse-patches-1.1.0.mpp -p -v
-sha256sum build/libs/muse-patches-1.1.0.mpp
+jar --update --file build/libs/muse-patches-1.2.0.mpp -C build/dex classes.dex
+java -jar "$RUNTIME" list-patches --patches build/libs/muse-patches-1.2.0.mpp -p -v
+sha256sum build/libs/muse-patches-1.2.0.mpp

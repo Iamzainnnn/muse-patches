@@ -1,11 +1,12 @@
 {
   "success": true,
-  "outputPath": "Muse-Default-v1.1.apk",
+  "outputPath": "Muse-v12-final.apk",
   "packageName": "com.facebook.aura",
   "packageVersion": "13.0.0.4.159",
   "appliedPatches": [
-    "Muse - Enable MC Debug",
-    "Muse - Side-by-side clone and standalone fix"
+    "Enable MC Debug",
+    "Local trust",
+    "Side-by-side clone"
   ],
   "failedPatches": [],
   "stepResults": [
