@@ -28,7 +28,7 @@ import java.security.MessageDigest
 
 private const val ORIGINAL = "com.facebook.aura"
 private const val DEFAULT_PACKAGE = "com.facebook.aura.mcdebug"
-private const val DEFAULT_APP_NAME = "MC Debug"
+private const val DEFAULT_APP_NAME = "Muse"
 private val packageNameOption = stringOption(
     key = "packageName", default = DEFAULT_PACKAGE, title = "Package name",
     description = "Unique app ID, different from com.facebook.aura.",
@@ -232,23 +232,13 @@ val museMcDebug = bytecodePatch(
     execute { replaceBodies("mcdebug") }
 }
 
-private val testLabel = resourcePatch {
-    dependsOn(cloneResources)
-    execute {
-        document("AndroidManifest.xml").use { doc ->
-            (doc.getElementsByTagName("application").item(0) as Element)
-                .setAttributeNS(ANDROID, "android:label", if (cloneAppName == DEFAULT_APP_NAME) "MC Debug Test" else cloneAppName)
-        }
-    }
-}
-
 val museLocalTrust = bytecodePatch(
     name = "Local trust",
     description = "Relax local caller checks. Reduces caller protection.",
     default = true
 ) {
     compatibleWith(museCompatibility)
-    dependsOn(museMcDebug, testLabel)
+    dependsOn(museMcDebug)
     execute {
         replaceBodies("trust")
         val cpz = method("LX/CPz;", "ABD(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;LX/COo;)Ljava/util/ArrayList;")
