@@ -1,0 +1,16 @@
+.tools/
+build/
+.gradle/
+*.apk
+*.apkm
+*.apks
+*.xapk
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.pem
+*.key
+storepass
+.env
+__pycache__/
