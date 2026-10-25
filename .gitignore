@@ -1,8 +1,5 @@
 /.tools/
 /build/
-/dist/*
-!/dist/muse-patches-1.2.1.mpp
-!/dist/SHA256SUMS
 /verification/
 /output/
 /tmp/
@@ -25,8 +22,6 @@ venv/
 *.so
 *.o
 *.a
-*.mpp
-!/dist/muse-patches-1.2.1.mpp
 *.apk
 *.apkm
 *.apks
@@ -56,3 +51,8 @@ local.properties
 *.pem
 *.key
 storepass
+!/dist/
+!/dist/*.mpp
+!/dist/SHA256SUMS
+!/patches-bundle.json
+!/patches-list.json
