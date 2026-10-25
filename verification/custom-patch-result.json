@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "outputPath": "Muse-Custom.apk",
+  "packageName": "com.facebook.aura",
+  "packageVersion": "13.0.0.4.159",
+  "appliedPatches": [
+    "Muse - Enable MC Debug",
+    "Muse - Local trust test (unsafe)",
+    "Muse - Side-by-side clone and standalone fix"
+  ],
+  "failedPatches": [],
+  "stepResults": [
+    {
+      "step": "PATCHING",
+      "success": true
+    },
+    {
+      "step": "REBUILDING",
+      "success": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "created_at": "2026-10-25T09:16:33",
+  "description": "Muse 13.0.0.4.159 / 1061801514: side-by-side clone, standalone fix, MC Debug, and optional unsafe local-trust test. Android Manager compatible bundle; no phone runtime success claimed.",
+  "download_url": "https://raw.githubusercontent.com/luvztroy/muse-patches/main/dist/muse-patches-1.1.0.mpp",
+  "signature_download_url": "",
+  "version": "1.1.0"
+}

@@ -1,0 +1,16 @@
+{
+  "version": "1.1.0",
+  "sha256": "814ea1e2d2eeff017ee62cc973eccb1b8a931829aa1794bf2585f990b9cab6fa",
+  "patcher_version": "2.0.0",
+  "manager_target": "2.1.0",
+  "android_classes_dex_present": true,
+  "custom_package": "com.example.muse",
+  "custom_app_name": "My Custom Muse",
+  "custom_branding_with_trust_patch_verified": true,
+  "custom_share_labels_verified": 38,
+  "custom_account_type_verified": true,
+  "default_package_and_labels_verified": true,
+  "runtime_tested": false,
+  "phone_manager_tested": false,
+  "invalid_option_behavior": "Validator rejects malformed values; Desktop logs a warning and retains the default."
+}
